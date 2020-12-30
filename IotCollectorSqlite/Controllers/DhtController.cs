@@ -52,7 +52,7 @@ namespace IotCollectorSqlite.Controllers
             payload.Add(new LineProtocolPoint("solar",
                 new Dictionary<string, object>
                 {
-                    { "val", temperature }
+                    { "val", 1 }
                 },
                 new Dictionary<string, string>
                 {
