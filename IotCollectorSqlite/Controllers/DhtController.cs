@@ -16,6 +16,11 @@ namespace IotCollectorSqlite.Controllers
     [Route("[controller]/[action]")]
     public class DhtController : ControllerBase
     {
+        private readonly ILogger<DhtController> _logger;
+        public DhtController(ILogger<DhtController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         public string Get(string i, string t = "0", string h = "0")
         {
@@ -61,6 +66,8 @@ namespace IotCollectorSqlite.Controllers
             ));
             var client = new LineProtocolClientUnsafe(new Uri(Environment.GetEnvironmentVariable("INFSERVER")), "lora_temp", Environment.GetEnvironmentVariable("INFUSER"), Environment.GetEnvironmentVariable("INFPASS"));
             var influxResult = client.WriteAsync(payload).Result;
+            if (!influxResult.Success)
+                _logger.LogDebug(influxResult.ErrorMessage);
         }
 
         [HttpGet]
