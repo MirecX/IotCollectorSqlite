@@ -4,6 +4,8 @@ using System.Data.SQLite;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using InfluxDB.LineProtocol.Payload;
+using IotCollectorSqlite.InfluxLog;
 using IotCollectorSqlite.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -41,6 +43,24 @@ namespace IotCollectorSqlite.Controllers
             cmd.ExecuteNonQuery();
 
             con.Close();
+            StoreToInflux(stationId, temperature, humidity);
+        }
+
+        public void StoreToInflux(string stationId, double temperature, int humidity)
+        {
+            var payload = new LineProtocolPayload();
+            payload.Add(new LineProtocolPoint("solar",
+                new Dictionary<string, object>
+                {
+                    { "val", temperature }
+                },
+                new Dictionary<string, string>
+                {
+                    { "sensor", stationId }
+                }
+            ));
+            var client = new LineProtocolClientUnsafe(new Uri(Environment.GetEnvironmentVariable("INFSERVER")), "lora_temp", Environment.GetEnvironmentVariable("INFUSER"), Environment.GetEnvironmentVariable("INFPASS"));
+            var influxResult = client.WriteAsync(payload).Result;
         }
 
         [HttpGet]
