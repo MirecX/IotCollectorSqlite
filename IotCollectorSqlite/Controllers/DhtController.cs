@@ -64,10 +64,10 @@ namespace IotCollectorSqlite.Controllers
                     { "sensor", stationId }
                 }
             ));
-            var client = new LineProtocolClientUnsafe(new Uri(Environment.GetEnvironmentVariable("INFSERVER")), "lora_temp", Environment.GetEnvironmentVariable("INFUSER"), Environment.GetEnvironmentVariable("INFPASS"));
-            var influxResult = client.WriteAsync(payload).Result;
-            if (!influxResult.Success)
-                _logger.LogDebug(influxResult.ErrorMessage);
+            //var client = new LineProtocolClientUnsafe(new Uri(Environment.GetEnvironmentVariable("INFSERVER")), "lora_temp", Environment.GetEnvironmentVariable("INFUSER"), Environment.GetEnvironmentVariable("INFPASS"));
+            //var influxResult = client.WriteAsync(payload).Result;
+            //if (!influxResult.Success)
+            //    _logger.LogDebug(influxResult.ErrorMessage);
         }
 
         [HttpGet]
